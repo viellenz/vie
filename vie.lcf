@@ -5,7 +5,7 @@
 # 更多插件可前往 https://hub.kelee.one 安装
 # --------------------------------
 # Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
-# Config-Version: 2026-06-06-flat-main-v2
+# Config-Version: 2026-06-07-flat-main-v3
 # Main-Policy: 节点选择；总入口直接选择具体节点，地区组只作为服务分流的可选入口，附带全量节点审计脚本
 
 [General]
