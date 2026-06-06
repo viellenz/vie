@@ -1,10 +1,12 @@
 // Vie Loon full policy/node audit.
 // Runs inside Loon. It tests current policy groups and every concrete node visible under 节点选择.
 (function () {
-  var VERSION = "2026-06-06-full-audit-v1";
+  var VERSION = "2026-06-07-full-audit-v2";
   var TEST_URL = "https://www.cloudflare.com/cdn-cgi/trace";
   var TIMEOUT_MS = 9000;
-  var CONCURRENCY = 4;
+  var CHILDREN_TIMEOUT_MS = 5000;
+  var REQUEST_GUARD_MS = 12000;
+  var CONCURRENCY = 3;
   var MAX_NODES = 220;
 
   var policyGroups = [
@@ -62,11 +64,24 @@
   }
 
   function getChildren(name, callback) {
+    var called = false;
+    var timer = setTimeout(function () {
+      if (called) return;
+      called = true;
+      callback("getSubPolicies timeout", []);
+    }, CHILDREN_TIMEOUT_MS);
+
     try {
       $config.getSubPolicies(name, function (children) {
+        if (called) return;
+        called = true;
+        clearTimeout(timer);
         callback(null, normalizeChildren(children));
       });
     } catch (e) {
+      if (called) return;
+      called = true;
+      clearTimeout(timer);
       callback(String(e), []);
     }
   }
@@ -108,11 +123,26 @@
 
   function testByNode(name, callback) {
     var t0 = Date.now();
+    var called = false;
+    var timer = setTimeout(function () {
+      if (called) return;
+      called = true;
+      callback({
+        target: name,
+        ok: false,
+        elapsed: Date.now() - t0,
+        error: "request callback timeout"
+      });
+    }, REQUEST_GUARD_MS);
+
     $httpClient.get({
       url: TEST_URL,
       timeout: TIMEOUT_MS,
       node: name
     }, function (err, response, data) {
+      if (called) return;
+      called = true;
+      clearTimeout(timer);
       var elapsed = Date.now() - t0;
       if (err) {
         callback({
