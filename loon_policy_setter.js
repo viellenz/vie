@@ -30,13 +30,26 @@
   }
 
   var ok = false;
+  var method = "";
   try {
-    ok = $config.getConfig(policy, select);
+    if (typeof $config.setSelectPolicy === "function") {
+      method = "setSelectPolicy";
+      ok = $config.setSelectPolicy(policy, select);
+    } else {
+      method = "getConfig(policy, select)";
+      ok = $config.getConfig(policy, select);
+      if (typeof ok === "string" && ok.indexOf('"running_model"') >= 0) {
+        lines.push("fallback returned config JSON, not a set result");
+        ok = false;
+      }
+    }
   } catch (e) {
     lines.push("set error: " + String(e));
   }
 
-  lines.push("set result=" + ok);
+  lines.push("method=" + method);
+  lines.push("set result type=" + (typeof ok));
+  lines.push("set result=" + String(ok));
   try {
     lines.push("selected now=" + $config.getSelectedPolicy(policy));
     var cfg = JSON.parse($config.getConfig());
