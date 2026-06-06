@@ -5,8 +5,8 @@
 # 更多插件可前往 https://hub.kelee.one 安装
 # --------------------------------
 # Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
-# Config-Version: 2026-06-06-region-selector-v1
-# Main-Policy: 节点选择；总入口只选择地区/其余/DIRECT，具体节点在地区组内选择，避免单一筛选器入口固定到旧出口
+# Config-Version: 2026-06-06-region-selector-v2
+# Main-Policy: 节点选择；总入口只选择地区/其余/DIRECT，具体节点在地区组内选择，附带运行态诊断脚本
 
 [General]
 ip-mode = ipv4-only
@@ -129,6 +129,7 @@ https://kelee.one/Tool/Loon/Lsr/REGION_SPLITTER.lsr, policy=DIRECT, tag=CN REGIO
 [Rewrite]
 
 [Script]
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_runtime_probe.js, timeout=30, tag=Vie策略诊断, enabled=true
 
 [Plugin]
 https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx, pin=true, enabled=true
