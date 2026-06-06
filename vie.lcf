@@ -47,12 +47,12 @@ bypass-tun = 10.0.0.0/8,100.64.0.0/10,127.0.0.0/8,169.254.0.0/16,172.16.0.0/12,1
 [Proxy Group]
 # --------------------------------
 # 全局入口
-Proxies = select,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/shindgewongxj/WHATSINStash/main/icon/select.png
+Proxies = select,全球节点,img-url = https://raw.githubusercontent.com/shindgewongxj/WHATSINStash/main/icon/select.png
 # --------------------------------
 # 服务分流（手动选择）
 Telegram = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,DIRECT,img-url = https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/qure/color/Telegram.png
-Google = select,US,Proxies,HK,JP,TW,SG,KR,其余节点,DIRECT,img-url = https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/Google.png
-Gemini = select,Google,US,Proxies,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/gemini(1).png
+Google = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,DIRECT,img-url = https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/Google.png
+Gemini = select,Google,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/lige47/QuanX-icon-rule/main/icon/04ProxySoft/gemini(1).png
 AI = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/Orz-3/mini/master/Color/OpenAI.png
 TikTok = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/TikTok.png
 Social = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,DIRECT,img-url = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Line.png
