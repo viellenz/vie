@@ -5,7 +5,7 @@
 # 更多插件可前往 https://hub.kelee.one 安装
 # --------------------------------
 # Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
-# Config-Version: 2026-06-06-region-selector-v3
+# Config-Version: 2026-06-06-region-selector-v4
 # Main-Policy: 节点选择；总入口只选择地区/DIRECT，具体节点在地区组内选择，附带诊断与强制切换脚本
 
 [General]
@@ -130,12 +130,12 @@ https://kelee.one/Tool/Loon/Lsr/REGION_SPLITTER.lsr, policy=DIRECT, tag=CN REGIO
 
 [Script]
 generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_runtime_probe.js, timeout=30, tag=Vie策略诊断, enabled=true
-generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter.js, timeout=10, argument="policy=节点选择&select=US", tag=Vie切到US, enabled=true
-generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter.js, timeout=10, argument="policy=节点选择&select=HK", tag=Vie切到HK, enabled=true
-generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter.js, timeout=10, argument="policy=节点选择&select=JP", tag=Vie切到JP, enabled=true
-generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter.js, timeout=10, argument="policy=节点选择&select=TW", tag=Vie切到TW, enabled=true
-generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter.js, timeout=10, argument="policy=节点选择&select=SG", tag=Vie切到SG, enabled=true
-generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter.js, timeout=10, argument="policy=节点选择&select=KR", tag=Vie切到KR, enabled=true
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter_v2.js, timeout=10, argument="policy=节点选择&select=US", tag=Vie切到US, enabled=true
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter_v2.js, timeout=10, argument="policy=节点选择&select=HK", tag=Vie切到HK, enabled=true
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter_v2.js, timeout=10, argument="policy=节点选择&select=JP", tag=Vie切到JP, enabled=true
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter_v2.js, timeout=10, argument="policy=节点选择&select=TW", tag=Vie切到TW, enabled=true
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter_v2.js, timeout=10, argument="policy=节点选择&select=SG", tag=Vie切到SG, enabled=true
+generic script-path=https://raw.githubusercontent.com/viellenz/vie/main/loon_policy_setter_v2.js, timeout=10, argument="policy=节点选择&select=KR", tag=Vie切到KR, enabled=true
 
 [Plugin]
 https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx, pin=true, enabled=true
