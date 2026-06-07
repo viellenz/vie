@@ -4,8 +4,8 @@
 # Author: https://t.me/iKeLee
 # 更多插件可前往 https://hub.kelee.one 安装
 # --------------------------------
-# Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
-# Config-Version: 2026-06-07-short-policy-v3
+# Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Netflix/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
+# Config-Version: 2026-06-07-short-policy-v4
 # Main-Policy: Proxies
 
 [General]
@@ -60,6 +60,7 @@ TikTok = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.git
 Social = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,DIRECT,img-url = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Line.png
 YouTube = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,DIRECT,img-url = https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/YouTube.png
 Spotify = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Spotify.png
+Netflix = select,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Netflix.png
 Microsoft = select,DIRECT,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png
 Apple = select,DIRECT,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/qure/color/Apple.png
 # --------------------------------
@@ -90,6 +91,7 @@ https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Microsoft/Microsoft.list, policy=Microsoft, tag=Microsoft, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Apple/Apple.list, policy=Apple, tag=Apple, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Spotify/Spotify.list, policy=Spotify, tag=Spotify, enabled=true
+https://git.repcz.link/rule.kelee.one/Loon/Netflix.lsr, policy=Netflix, tag=Netflix, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Twitter/Twitter.list, policy=Social, tag=Twitter, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Instagram/Instagram.list, policy=Social, tag=Instagram, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Whatsapp/Whatsapp.list, policy=Social, tag=WhatsApp, enabled=true
@@ -101,7 +103,6 @@ https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=TikTok, tag=TikTok, enabled=t
 https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=AI, tag=AI, enabled=true
 https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr, policy=Proxies, tag=Speedtest Intl, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/GitHub/GitHub.list, policy=Proxies, tag=GitHub, enabled=true
-https://rule.kelee.one/Loon/Netflix.lsr, policy=SG, tag=Netflix, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/WeChat/WeChat.list, policy=DIRECT, tag=WeChat, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Tencent/Tencent.list, policy=DIRECT, tag=Tencent, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Alibaba/Alibaba.list, policy=DIRECT, tag=Alibaba, enabled=true
