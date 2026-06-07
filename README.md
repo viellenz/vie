@@ -1,40 +1,74 @@
-# vie Loon Config
+# vie.lcf
 
-这是基于可莉 Loon 进阶配置整理出的个人 Loon 配置。目标是保留可莉配置的 DNS、防泄漏、插件和基础规则，同时加入按应用分流，让 iPad 上的 Loon 接近 PC 上 Clash 的使用体验。
+`vie.lcf` 是一份 Loon 远端配置文件，基于可莉 Loon 进阶配置整理，保留原配置的 DNS、防泄漏、MITM、复写、插件与基础直连规则，并补充常用服务分流策略。
 
-当前主配置文件：
+正式入口只有一个：
 
-- `vie.lcf`
-- Raw 导入地址：`https://raw.githubusercontent.com/viellenz/vie/main/vie.lcf`
-
-> 仓库版配置不包含机场订阅、本地节点、MITM 证书和私有参数。订阅和本地节点请在 Loon 内自行添加。
-
-## 当前版本
-
-- 配置版本：`2026-06-07-short-policy-v4`
-- 主入口策略：`Proxies`
-- 兜底规则：`FINAL,Proxies`
-- IP 模式：`ipv4-only`
-- 策略切换断开旧连接：`disconnect-on-policy-change = true`
-
-## Final 为什么不显示
-
-`Final` 不是一个可见策略组，而是 Loon 规则里的兜底规则。
-
-配置中实际写法是：
-
-```ini
-[Rule]
-FINAL,Proxies
+```text
+https://raw.githubusercontent.com/viellenz/vie/main/vie.lcf
 ```
 
-含义是：如果一个请求没有命中前面的远程规则、本地规则、国内直连规则或插件规则，就交给 `Proxies` 处理。
+仓库版不包含机场订阅、本地节点、MITM 证书、私有参数。节点订阅和本地节点应在 Loon 内单独添加。
 
-所以在 Loon 的策略页面里看不到 `Final` 是正常的。策略页面只显示 `[Proxy Group]` 里的分组；`FINAL,Proxies` 只是规则，不会生成单独卡片。
+## 配置摘要
 
-## 策略组顺序
+| 项目 | 当前值 |
+| --- | --- |
+| 文件 | `vie.lcf` |
+| 配置版本 | `2026-06-07-short-policy-v4` |
+| Loon 模式 | 分流配置 |
+| 主策略 | `Proxies` |
+| 兜底规则 | `FINAL,Proxies` |
+| IP 模式 | `ipv4-only` |
+| 策略切换 | `disconnect-on-policy-change = true` |
+| 可见策略组 | 18 个 |
+| 订阅节点 | 不写入仓库版 |
 
-当前可见策略组共 18 个，顺序如下：
+## 文件结构
+
+`vie.lcf` 使用 Loon 标准配置段：
+
+```ini
+[General]
+[Proxy]
+[Remote Proxy]
+[Remote Filter]
+[Proxy Group]
+[Rule]
+[Remote Rule]
+[Host]
+[Rewrite]
+[Script]
+[Plugin]
+[Mitm]
+```
+
+结构来源：
+
+- 主体配置、DNS、插件、MITM、复写结构：可莉 Loon 进阶配置。
+- 策略组显示结构：短命名手动策略结构，使用 `Proxies`、服务组、地区组。
+- 规则补充：按服务拆分到独立策略组。
+- 节点来源：不写在仓库配置内，由 Loon 本地订阅或本地节点提供。
+
+## 导入方式
+
+在 Loon 中导入远端配置：
+
+```text
+https://raw.githubusercontent.com/viellenz/vie/main/vie.lcf
+```
+
+导入后建议确认：
+
+1. 添加机场订阅或本地节点。
+2. 更新远端资源。
+3. 进入策略页，确认 `Proxies` 中能看到节点。
+4. 选择 `Proxies` 内的具体节点。
+5. 打开请求记录或 IP 检测页面确认出口变化。
+
+## 策略组
+
+当前 `[Proxy Group]` 可见策略组顺序：
 
 ```text
 1. Proxies
@@ -57,292 +91,255 @@ FINAL,Proxies
 18. KR
 ```
 
-其中：
+策略组说明：
 
-- `Proxies` 是全局主入口，默认显示所有有效节点。
-- `US/HK/JP/TW/SG/KR` 是地区筛选组。
-- `Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Netflix/Microsoft/Apple` 是应用分流组。
-- `其余节点` 只作为 `[Remote Filter]` 筛选器存在，被应用分流组引用，不作为单独策略组显示。
+| 策略组 | 用途 | 默认候选 |
+| --- | --- | --- |
+| `Proxies` | 全局代理入口 | `全球节点` |
+| `Telegram` | Telegram 分流 | `Proxies`、地区组、`其余节点`、`DIRECT` |
+| `Google` | Google 分流 | `Proxies`、地区组、`其余节点`、`DIRECT` |
+| `Gemini` | Gemini 分流 | `Google`、`Proxies`、地区组、`其余节点` |
+| `AI` | AI 服务分流 | `Proxies`、地区组、`其余节点` |
+| `TikTok` | TikTok 分流 | `Proxies`、地区组、`其余节点` |
+| `Social` | 社交服务分流 | `Proxies`、地区组、`其余节点`、`DIRECT` |
+| `YouTube` | YouTube 分流 | `Proxies`、地区组、`其余节点`、`DIRECT` |
+| `Spotify` | Spotify 分流 | `Proxies`、地区组、`其余节点` |
+| `Netflix` | Netflix 分流 | `Proxies`、地区组、`其余节点` |
+| `Microsoft` | Microsoft 分流 | `DIRECT`、`Proxies`、地区组、`其余节点` |
+| `Apple` | Apple 分流 | `DIRECT`、`Proxies`、地区组、`其余节点` |
+| `US/HK/JP/TW/SG/KR` | 地区节点手选 | 对应地区筛选器 |
 
-## 流量走向
+`其余节点` 不是可见策略组，它只存在于 `[Remote Filter]`，供服务策略组选用。
 
-整体逻辑：
+## 流量路径
+
+Loon 的基本流量路径是：
 
 ```text
 请求
-  -> Remote Rule / Rule 命中
-  -> 对应应用策略组
-  -> Proxies 或地区组
-  -> 节点
-
-未命中任何规则
-  -> FINAL
-  -> Proxies
-  -> 当前手选节点
+  -> 规则匹配
+  -> 规则指定策略
+  -> 策略组选中的节点或内置策略
 ```
 
-例子：
+本配置的典型路径：
 
-- 访问 Telegram：命中 Telegram 规则，走 `Telegram` 策略组。
-- 访问 YouTube：命中 YouTube 规则，走 `YouTube` 策略组。
-- 访问 Netflix：命中 Netflix 规则，走 `Netflix` 策略组。
-- 访问 GitHub：命中 GitHub 规则，走 `Proxies`。
-- 访问一个没有被规则覆盖的国外网站：命中 `FINAL,Proxies`，走 `Proxies`。
-- 访问微信、淘宝、B 站等国内应用：命中国内应用规则，走 `DIRECT`。
+```text
+Google 请求
+  -> Google 规则
+  -> Google 策略组
+  -> Proxies / 地区组 / DIRECT
 
-## 策略组用途
+Netflix 请求
+  -> Netflix 规则
+  -> Netflix 策略组
+  -> Proxies / 地区组
 
-### Proxies
+未命中请求
+  -> FINAL
+  -> Proxies
+```
 
-全局默认代理入口。一般情况下只需要切这个组里的具体节点。
-
-如果一个网站没有命中任何应用分流规则，最终会走：
+`Final` 不会显示为策略组。它是 `[Rule]` 中的兜底规则：
 
 ```ini
 FINAL,Proxies
 ```
 
-### Google 和 Gemini
-
-`Gemini` 的第一项是 `Google`：
-
-```ini
-Gemini = select,Google,Proxies,US,HK,JP,TW,SG,KR,其余节点
-```
-
-这样做是为了让 Gemini 默认跟随 Google。Gemini 登录、验证、账号风控会牵涉 Google 相关域名，如果 Google 和 Gemini 分到不同地区，可能出现登录异常、地区异常或风控。
-
-### AI
-
-`AI` 使用可莉的 `AI.lsr`：
-
-```ini
-https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=AI
-```
-
-适合覆盖常见 AI 服务。后续如果发现某个 AI 域名没命中，可以再单独补规则。
-
-### TikTok
-
-`TikTok` 使用可莉规则：
-
-```ini
-https://kelee.one/Tool/Loon/Lsr/TikTok.lsr, policy=TikTok
-```
-
-TikTok 解锁通常还和节点原生地区、SIM/系统地区、DNS、App 缓存有关。规则只负责把 TikTok 流量导向指定策略组。
-
-### Netflix
-
-`Netflix` 使用可莉规则：
-
-```ini
-https://git.repcz.link/rule.kelee.one/Loon/Netflix.lsr, policy=Netflix
-```
-
-`Netflix` 策略组默认跟随 `Proxies`，也可以手动切到 `US/HK/JP/TW/SG/KR/其余节点`。Netflix 解锁结果取决于节点本身是否支持对应地区的流媒体解锁，规则只负责把 Netflix 流量导向这个策略组。这里使用的是可莉 Netflix 规则的镜像地址，避免直连 `rule.kelee.one` 时偶发 403。
-
-### Microsoft 和 Apple
-
-默认第一项是 `DIRECT`：
-
-```ini
-Microsoft = select,DIRECT,Proxies,US,HK,JP,TW,SG,KR,其余节点
-Apple = select,DIRECT,Proxies,US,HK,JP,TW,SG,KR,其余节点
-```
-
-这样可以减少系统更新、iCloud、微软服务等大量基础流量走代理。需要代理时可以手动切到 `Proxies` 或地区组。
+含义是：所有未命中前置规则的请求默认交给 `Proxies`。
 
 ## 规则来源
 
 ### blackmatrix7
 
-用于主要应用分流：
+主要应用分流与国内应用直连规则来自 `blackmatrix7/ios_rule_script` 的 Loon 规则目录：
 
-- Gemini
-- YouTube
-- Google
-- Telegram
-- Microsoft
-- Apple
-- Spotify
-- Twitter
-- Instagram
-- WhatsApp
-- Discord
-- Line
-- Facebook
-- Reddit
-- 国内应用直连规则
+| 类型 | 策略 |
+| --- | --- |
+| Gemini | `Gemini` |
+| YouTube | `YouTube` |
+| Google | `Google` |
+| Telegram | `Telegram` |
+| Microsoft | `Microsoft` |
+| Apple | `Apple` |
+| Spotify | `Spotify` |
+| Twitter / Instagram / WhatsApp / Discord / Line / Facebook / Reddit | `Social` |
+| WeChat / Tencent / Alibaba / ByteDance / Baidu / BiliBili 等 | `DIRECT` |
 
 ### 可莉规则
 
-保留可莉相关规则：
+以下规则保留可莉规则源或可莉规则镜像：
 
-- TikTok
-- AI
-- SpeedtestInternational
-- LAN_SPLITTER
-- REGION_SPLITTER
-- Netflix
+| 规则 | 策略 | 地址 |
+| --- | --- | --- |
+| TikTok | `TikTok` | `https://kelee.one/Tool/Loon/Lsr/TikTok.lsr` |
+| AI | `AI` | `https://kelee.one/Tool/Loon/Lsr/AI.lsr` |
+| Speedtest International | `Proxies` | `https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr` |
+| Netflix | `Netflix` | `https://git.repcz.link/rule.kelee.one/Loon/Netflix.lsr` |
+| LAN | `DIRECT` | `https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr` |
+| CN REGION | `DIRECT` | `https://kelee.one/Tool/Loon/Lsr/REGION_SPLITTER.lsr` |
+
+Netflix 使用镜像地址是因为直连 `rule.kelee.one` 在部分网络环境可能返回 403；镜像地址已验证可拉取规则内容。
+
+## 图标来源
+
+| 类型 | 来源 |
+| --- | --- |
+| Proxies | `shindgewongxj/WHATSINStash` |
+| Telegram / Apple | `blackmatrix7/ios_rule_script` Qure 图标 |
+| Google / YouTube | `Semporia/Hand-Painted-icon` |
+| Gemini | `lige47/QuanX-icon-rule` |
+| AI | `Orz-3/mini` |
+| TikTok / Social / Spotify / Netflix | `luestr/IconResource` |
+| Microsoft / 地区图标 | `Koolson/Qure` |
 
 ## 插件
 
-当前插件包含：
+当前 `[Plugin]` 包含：
 
-```text
-Block_HTTPDNS
-BlockAdvertisers
-QuickSearch
-Prevent_DNS_Leaks
-Node_detection_tool
-AppleWeatherEnhancer
-iRingo Maps
-TestFlightRegionUnlock
-BoxJs
-Sub-Store
-Script-Hub
-```
+| 插件 | 状态 | 用途 |
+| --- | --- | --- |
+| `Block_HTTPDNS` | 启用 | 拦截常见 HTTPDNS |
+| `BlockAdvertisers` | 启用 | 广告平台拦截基础插件 |
+| `QuickSearch` | 启用 | Safari 快捷搜索 |
+| `Prevent_DNS_Leaks` | 启用 | DNS 防泄漏，策略为 `Proxies` |
+| `Node_detection_tool` | 启用 | 节点检测工具 |
+| `AppleWeatherEnhancer` | 启用 | Apple 天气增强 |
+| `iRingo Maps` | 启用 | 地图增强 |
+| `TestFlightRegionUnlock` | 禁用 | TestFlight 区域解锁，需要时手动启用 |
+| `BoxJs` | 启用 | 脚本数据管理 |
+| `Sub-Store` | 启用 | 订阅管理 |
+| `Script-Hub` | 启用 | 脚本转换和管理 |
 
-说明：
+## Loon 开关建议
 
-- `Block_HTTPDNS`：拦截常见 HTTPDNS，减少应用绕过 Loon DNS 的情况。
-- `BlockAdvertisers`：广告平台拦截基础插件。
-- `Prevent_DNS_Leaks`：DNS 防泄漏相关插件，走 `Proxies`。
-- `Node_detection_tool`：节点解锁测试工具。
-- `AppleWeatherEnhancer`：Apple 天气增强。
-- `iRingo Maps`：地图增强。
-- `BoxJs`：脚本数据管理。
-- `Sub-Store`：订阅管理工具。
-- `Script-Hub`：脚本转换和管理工具。
-- `TestFlightRegionUnlock`：默认禁用，需要时再手动开启。
+建议在 Loon 中开启：
 
-## Loon 内需要打开的开关
+- 复写
+- 脚本
+- 插件
+- MITM
 
-建议检查：
+MITM 需要安装并信任证书。仓库版不会保存证书内容。
 
-- 复写：开启
-- 脚本：开启
-- MITM：开启并安装、信任证书
-- 插件：开启
+`[Script]` 为空时，Loon 首页脚本数量显示 `0` 是正常现象。插件内部脚本不一定计入这里。
 
-注意：`[Script]` 里没有单独脚本时，Loon 首页脚本数量显示为 `0` 是正常的。很多脚本来自插件内部，不一定会显示在 `[Script]` 数量里。
-
-## 节点和订阅
-
-仓库版配置的 `[Remote Proxy]` 保持为空：
-
-```ini
-[Remote Proxy]
-```
-
-这是故意的。机场订阅和本地节点建议在 Loon 内添加，避免把私有链接提交到 GitHub。
-
-推荐方式：
-
-1. 在 Loon 里导入 `vie.lcf`。
-2. 到节点页面添加机场订阅。
-3. 如有自建节点，在 Loon 里添加本地节点。
-4. 回到策略页，在 `Proxies` 里手动选择当前要使用的节点。
-
-## 自建 VLESS 节点建议
-
-如果使用 VLESS + REALITY + Vision：
-
-- 地址可以填域名，也可以填 IP。
-- 如果域名只是为了指向 VPS，且不需要 Cloudflare DNS，可以直接填 IP。
-- `sni` 应保持服务端配置要求的值。
-- `flow` 使用服务端匹配的 `xtls-rprx-vision`。
-- `udp` 是否开启按节点能力决定。
-- `block-quic` 可以开启，减少 Google/YouTube QUIC 造成的异常。
-- `skip-cert-verify` 不建议长期依赖，能正常验证就关闭。
-
-## QUIC 说明
-
-Google、YouTube 等服务会优先尝试 QUIC，也就是 UDP 443。某些代理协议、节点或网络环境对 QUIC 支持不好时，可能出现：
-
-- YouTube 卡加载
-- Google 服务连接慢
-- 测速显示异常
-- 请求记录里出现被拦截的 QUIC
-
-当前配置和节点可按需启用 `block-quic`。如果 TCP 访问稳定，拦截 QUIC 通常没问题。
-
-## 常见排查
-
-### 切换节点后 IP 没变
-
-先确认你切的是 `Proxies` 里的具体节点，而不是只切了某个应用组或地区组。
-
-建议步骤：
-
-1. 进入策略页。
-2. 打开 `Proxies`。
-3. 选择具体节点。
-4. 回浏览器刷新 IP 测试页面。
-
-当前配置开启了：
-
-```ini
-disconnect-on-policy-change = true
-```
-
-切换策略后旧连接会断开，新请求应更快走新节点。
+## 常见问题
 
 ### 看不到 Final
 
 正常。`Final` 是规则，不是策略组。
 
-兜底规则是：
+当前兜底规则：
 
 ```ini
 FINAL,Proxies
 ```
 
-### 微信或国内应用走代理
+未命中的流量默认走 `Proxies`。
 
-先看请求记录命中的规则。如果命中 `FINAL,Proxies`，说明对应域名没有被国内规则覆盖。可以把域名补进本地规则，或等待上游规则更新。
+### 切换节点后出口 IP 不变
 
-当前已加入常见国内应用直连规则，包括：
+优先检查：
 
-- WeChat
-- Tencent
-- Alibaba
-- ByteDance
-- Baidu
-- BiliBili
-- NetEase
-- MeiTuan
-- Weibo
-- XiaoMi
-- JingDong
-- Pinduoduo
-- KuaiShou
-- GaoDe
-- DiDi
-- Zhihu
-- XiaoHongShu
-- Eleme
-- DingTalk
+1. 是否切换了 `Proxies` 内的具体节点。
+2. 当前请求是否命中了某个服务策略组，而该服务策略组被手动锁到地区组。
+3. 请求是否复用了旧连接。
+4. Loon 是否已更新远端资源。
 
-### 插件脚本数量为 0
+当前配置启用：
 
-如果 `[Script]` 为空，脚本数量显示 `0` 是正常的。插件内部包含的脚本不一定计入这里。
+```ini
+disconnect-on-policy-change = true
+```
 
-### Raw 链接更新不及时
+策略切换后旧连接会被断开，新请求应更快使用新节点。
 
-GitHub raw 可能有短时间缓存。仓库内容已经更新时，raw 链接偶尔还会显示旧版，等一会儿或重新刷新资源即可。
+### Google 与 Gemini 分流异常
 
-## 文件维护原则
+`Gemini` 默认第一项是 `Google`：
 
-- `vie.lcf` 是唯一正式入口。
-- 不再保留 `vie_stable.lcf` 之类备用文件。
-- 私有订阅、本地节点、MITM 证书不提交到 GitHub。
-- 调试脚本和历史版本只保留在本地归档目录，不写入正式配置。
+```ini
+Gemini = select,Google,Proxies,US,HK,JP,TW,SG,KR,其余节点
+```
 
-## 当前确认状态
+这样可以让 Gemini 与 Google 登录、验证相关请求尽量保持同一出口。若需要单独指定 Gemini 出口，可在 `Gemini` 策略组中手动切换。
 
-- 可见策略组数量：18
-- 策略顺序：基于 iPad 当前可用版，新增 `Netflix` 并放在 `Spotify` 后面，第一项使用 `Proxies`
-- `Final` 行为：未命中流量默认走 `Proxies`
-- 切换 `Proxies` 内节点：已确认可正常改变出口 IP
+### 国内应用偶发走代理
+
+先查看请求记录命中的规则。
+
+如果命中 `FINAL,Proxies`，说明该域名未被当前国内规则覆盖。可以临时补本地规则，或等待上游规则更新。
+
+### Netflix 无法解锁
+
+规则只能把 Netflix 流量导向 `Netflix` 策略组，不能保证节点本身具备解锁能力。
+
+排查顺序：
+
+1. 在 `Netflix` 策略组手动选择一个支持 Netflix 的节点。
+2. 使用节点检测工具确认 Netflix 状态。
+3. 检查 DNS、缓存、App 登录地区和节点原生地区。
+4. 重新打开 Netflix App 或清理相关缓存。
+
+### TikTok 无法解锁
+
+TikTok 解锁通常同时受节点地区、系统地区、SIM 状态、DNS、App 缓存影响。规则只负责流量分流。
+
+### QUIC 相关问题
+
+Google、YouTube 等服务可能使用 QUIC，也就是 UDP 443。节点或网络不稳定时，可能出现加载慢、测速异常、请求记录中出现 QUIC 被拦截。
+
+如果 TCP 访问正常，按节点情况开启 `block-quic` 通常可以降低异常。
+
+### GitHub Raw 链接延迟
+
+GitHub Raw 可能短时间缓存旧内容。仓库内容已更新但 Raw 仍显示旧版时，等待一段时间或刷新资源即可。
+
+## 维护规则
+
+- 只维护 `vie.lcf` 一个正式配置文件。
+- 不提交机场订阅、本地节点、MITM 证书、个人密钥。
+- 新增策略组后必须同步 `[Remote Rule]` 中的 `policy=`。
+- 新增图标后必须验证 URL 可访问。
+- 调整策略组顺序后必须重新检查 Loon 策略页显示顺序。
+- 修改 README 时必须同步版本号、策略组数量和规则来源。
+
+## 审查清单
+
+每次修改后至少检查：
+
+```text
+Proxy Group 数量与顺序
+policy= 是否都指向有效策略组或内置策略
+策略组成员是否存在于策略组、Remote Filter 或内置策略
+Netflix / AI / TikTok 等远程规则是否只有一条有效入口
+FINAL 是否仍为 FINAL,Proxies
+README 版本号与 vie.lcf 一致
+```
+
+当前已确认：
+
+```text
+GROUP_COUNT=18
+GROUP_ORDER_CHECK=OK
+MISSING_POLICY=none
+MISSING_MEMBERS=none
+NETFLIX_RULE_COUNT=1
+NETFLIX_RULE_CHECK=OK
+FINAL=Proxies
+```
+
+## 参考资料
+
+- Loon 官方文档：`https://nsloon.app/docs/intro/`
+- Loon 策略说明：`https://nsloon.app/docs/Policy/`
+- Loon 规则说明：`https://nsloon.app/docs/category/%E8%A7%84%E5%88%99/`
+- Loon 插件说明：`https://nsloon.app/docs/Plugin/`
+- Loon Scheme / 统一链接：`https://nsloon.app/docs/Scheme/`
+- 可莉 Loon 资源：`https://hub.kelee.one/`
+- blackmatrix7 规则：`https://github.com/blackmatrix7/ios_rule_script`
+- luestr 图标与规则资源：`https://github.com/luestr/IconResource`
+- Qure 图标：`https://github.com/Koolson/Qure`
+- GitHub README 文档建议：`https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes`
+- Write the Docs 文档写作指南：`https://www.writethedocs.org/guide/writing/beginners-guide-to-docs/`
