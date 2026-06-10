@@ -15,7 +15,7 @@ https://raw.githubusercontent.com/viellenz/vie/main/vie.lcf
 | 项目 | 当前值 |
 | --- | --- |
 | 文件 | `vie.lcf` |
-| 配置版本 | `2026-06-10-short-policy-v5` |
+| 配置版本 | `2026-06-10-short-policy-v6` |
 | 最低 Loon 版本 | `3.2.3 (754)`，由 `ip-mode`、`ipasn-url` 要求 |
 | Loon 模式 | 分流配置 |
 | 主策略 | `Proxies` |
@@ -102,6 +102,7 @@ Gemini -> YouTube -> Google -> AI -> Telegram -> Spotify -> Netflix
 | Microsoft | `Microsoft` |
 | Apple | `Apple` |
 | Spotify | `Spotify` |
+| Netflix | `Netflix` |
 | Twitter / Instagram / WhatsApp / Discord / Line / Facebook / Reddit | `Social` |
 | WeChat / Tencent / Alibaba / ByteDance / Baidu / BiliBili 等 | `DIRECT` |
 
@@ -114,11 +115,10 @@ Gemini -> YouTube -> Google -> AI -> Telegram -> Spotify -> Netflix
 | TikTok | `TikTok` | `https://kelee.one/Tool/Loon/Lsr/TikTok.lsr` |
 | AI | `AI` | `https://kelee.one/Tool/Loon/Lsr/AI.lsr` |
 | Speedtest International | `Proxies` | `https://kelee.one/Tool/Loon/Lsr/SpeedtestInternational.lsr` |
-| Netflix | `Netflix` | `https://git.repcz.link/rule.kelee.one/Loon/Netflix.lsr` |
 | LAN | `DIRECT` | `https://kelee.one/Tool/Loon/Lsr/LAN_SPLITTER.lsr` |
 | CN REGION | `DIRECT` | `https://kelee.one/Tool/Loon/Lsr/REGION_SPLITTER.lsr` |
 
-Netflix 使用镜像地址是因为直连 `rule.kelee.one` 在部分网络环境可能返回 403；镜像地址已验证可拉取规则内容。
+Netflix 规则源自 v6 起改为 blackmatrix7 直连：实测可莉 Netflix.lsr 与 blackmatrix7 Netflix.list 内容逐字节一致（可莉源即 blackmatrix7 数据的每日转录），直连源头少一个镜像跳板。`git.repcz.link` 镜像仍被 `[Plugin]` 中的 AppleWeatherEnhancer 使用——直连 kelee.one 拉取该插件在部分网络环境会返回 403。
 
 ## 图标来源
 
@@ -272,7 +272,7 @@ NETFLIX_RULE_COUNT=1
 NETFLIX_RULE_CHECK=OK
 FINAL=Proxies
 SHADOW_FLIP_COUNT=3（仅 TikTok 收编 ByteDance 基建域名，解锁设计，保留）
-VERSION=2026-06-10-short-policy-v5
+VERSION=2026-06-10-short-policy-v6
 GIT_HISTORY_SECRET_SCAN=clean（全历史 31 个 blob，无订阅/节点/证书/密钥）
 ```
 

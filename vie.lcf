@@ -6,7 +6,8 @@
 # --------------------------------
 # Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Netflix/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
 # Modified: 2026-06-10 — 重排 [Remote Rule] 修复宽后缀遮蔽(AI 上移至 Google 后、Microsoft/Apple 下移至代理类规则之后)；清理死配置(未引用的游戏节点过滤器、被 /15 覆盖的 198.18.0.1/16、skip-proxy 失效拼写域名、过滤器正则重复关键词)
-# Config-Version: 2026-06-10-short-policy-v5
+# Modified: 2026-06-10 — Netflix 规则源由 git.repcz.link 镜像改为 blackmatrix7 直连(实测两源内容逐字节一致, 可莉源即 blackmatrix7 数据的每日转录)；删除被 allow-wifi-access=false 闸死的两行 wifi-access 端口死配置
+# Config-Version: 2026-06-10-short-policy-v6
 # Main-Policy: Proxies
 
 [General]
@@ -18,8 +19,6 @@ disable-stun = true
 dns-reject-mode = LoopbackIP
 domain-reject-mode = DNS
 udp-fallback-mode = REJECT
-wifi-access-http-port = 7222
-wifi-access-socks5-port = 7221
 allow-wifi-access = false
 interface-mode = auto
 test-timeout = 5
@@ -95,7 +94,7 @@ https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/
 https://kelee.one/Tool/Loon/Lsr/AI.lsr, policy=AI, tag=AI, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Telegram/Telegram.list, policy=Telegram, tag=Telegram, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Spotify/Spotify.list, policy=Spotify, tag=Spotify, enabled=true
-https://git.repcz.link/rule.kelee.one/Loon/Netflix.lsr, policy=Netflix, tag=Netflix, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Netflix/Netflix.list, policy=Netflix, tag=Netflix, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Twitter/Twitter.list, policy=Social, tag=Twitter, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Instagram/Instagram.list, policy=Social, tag=Instagram, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Whatsapp/Whatsapp.list, policy=Social, tag=WhatsApp, enabled=true
