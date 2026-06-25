@@ -7,7 +7,7 @@
 # Modified: 2026-06-02 — 基于可莉原版新增 Telegram/Google/Gemini/AI/TikTok/Social/YouTube/Spotify/Netflix/Microsoft/Apple 服务分流(规则源 blackmatrix7 + 可莉),并移除原作者写死的家用 WiFi SSID 直连条件
 # Modified: 2026-06-10 — 重排 [Remote Rule] 修复宽后缀遮蔽(AI 上移至 Google 后、Microsoft/Apple 下移至代理类规则之后)；清理死配置(未引用的游戏节点过滤器、被 /15 覆盖的 198.18.0.1/16、skip-proxy 失效拼写域名、过滤器正则重复关键词)
 # Modified: 2026-06-10 — Netflix 规则源由 git.repcz.link 镜像改为 blackmatrix7 直连(实测两源内容逐字节一致, 可莉源即 blackmatrix7 数据的每日转录)；删除被 allow-wifi-access=false 闸死的两行 wifi-access 端口死配置
-# Config-Version: 2026-06-10-short-policy-v6
+# Config-Version: 2026-06-10-short-policy-v7
 # Main-Policy: Proxies
 
 [General]
@@ -64,12 +64,12 @@ Microsoft = select,DIRECT,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https
 Apple = select,DIRECT,Proxies,US,HK,JP,TW,SG,KR,其余节点,img-url = https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/qure/color/Apple.png
 # --------------------------------
 # Region groups
-US = select,美国节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png
-HK = select,香港节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png
-JP = select,日本节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png
-TW = select,台湾节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png
-SG = select,新加坡节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png
-KR = select,韩国节点,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png
+US = url-test,美国节点,interval = 600,tolerance = 100,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png
+HK = url-test,香港节点,interval = 600,tolerance = 100,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png
+JP = url-test,日本节点,interval = 600,tolerance = 100,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png
+TW = url-test,台湾节点,interval = 600,tolerance = 100,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png
+SG = url-test,新加坡节点,interval = 600,tolerance = 100,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png
+KR = url-test,韩国节点,interval = 600,tolerance = 100,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png
 
 [Rule]
 # 当配置文件中没有任何有效策略组时，Loon将使用内置的PROXY策略组
