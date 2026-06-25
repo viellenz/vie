@@ -15,12 +15,13 @@ https://raw.githubusercontent.com/viellenz/vie/main/vie.lcf
 | 项目 | 当前值 |
 | --- | --- |
 | 文件 | `vie.lcf` |
-| 配置版本 | `2026-06-10-short-policy-v7` |
+| 配置版本 | `2026-06-10-short-policy-v8` |
 | 最低 Loon 版本 | `3.2.3 (754)`，由 `ip-mode`、`ipasn-url` 要求 |
 | Loon 模式 | 分流配置 |
 | 主策略 | `Proxies` |
 | 兜底规则 | `FINAL,Proxies` |
 | IP 模式 | `ipv4-only` |
+| DNS | `system` + Google/Cloudflare DoH |
 | 策略切换 | `disconnect-on-policy-change = true` |
 | 可见策略组 | 18 个 |
 | 订阅节点 | 不写入仓库版 |
@@ -272,7 +273,7 @@ NETFLIX_RULE_COUNT=1
 NETFLIX_RULE_CHECK=OK
 FINAL=Proxies
 SHADOW_FLIP_COUNT=3（仅 TikTok 收编 ByteDance 基建域名，解锁设计，保留）
-VERSION=2026-06-10-short-policy-v7
+VERSION=2026-06-10-short-policy-v8
 GIT_HISTORY_SECRET_SCAN=clean（全历史 31 个 blob，无订阅/节点/证书/密钥）
 ```
 
